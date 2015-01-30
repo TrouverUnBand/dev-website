@@ -59,7 +59,8 @@ namespace TrouveUnBand
                  "~/Content/timepicker.css",
                  "~/Content/homepage.css",
                  "~/Content/event.css",
-                 "~/Content/alerts.css"
+                 "~/Content/alerts.css",
+                 "~/Content/profile-modification.css"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

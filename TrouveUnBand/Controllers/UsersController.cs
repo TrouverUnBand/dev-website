@@ -10,6 +10,8 @@ using System.Web.Security;
 using TrouveUnBand.Classes;
 using TrouveUnBand.Models;
 using TrouveUnBand.POCO;
+using TrouveUnBand.Services;
+using TrouveUnBand.ViewModels;
 
 namespace TrouveUnBand.Controllers
 {
@@ -156,12 +158,12 @@ namespace TrouveUnBand.Controllers
             }
         }
 
-        private string UpdateProfil(User user)
+        private string UpdateProfil(ProfileModificationViewModel.UserInfo userInfo)
         {
             try
             {
-                var loggedOnUser = db.Users.FirstOrDefault(x => x.Nickname == user.Nickname);
-                SetUserInfo(loggedOnUser, user);
+                var loggedOnUser = db.Users.FirstOrDefault(u => u.User_ID == userInfo.UserId);
+                SetUserInfo(loggedOnUser, userInfo);
                 db.SaveChanges();
 
                 return "";
@@ -174,26 +176,21 @@ namespace TrouveUnBand.Controllers
 
         public ActionResult ProfileModification()
         {
-            ViewBag.InstrumentListDD = new List<Instrument>(db.Instruments);
+            User loggedOnUser = UserDao.GetUserByNickname(User.Identity.Name);
 
-            User loggedOnUserValid = GetUserInfo(User.Identity.Name);
+            ProfileModificationViewModel profileModificationView =
+                new ProfileModificationViewModel(loggedOnUser)
+                {
+                    MusicianInfos = {InstrumentList = new List<Instrument>(db.Instruments)}
+                };
 
-            ViewData["UserData"] = loggedOnUserValid;
 
-            User musicianQuery = db.Users.FirstOrDefault(x => x.User_ID == loggedOnUserValid.User_ID);
-            if (musicianQuery == null)
-            {
-                musicianQuery = new User();
-            }
-            ViewData["MusicianProfilData"] = musicianQuery;
-            return View();
+            return View(profileModificationView);
         }
 
         [HttpPost]
-        public ActionResult UserProfileModification(User userModel)
+        public ActionResult UserProfileModification(ProfileModificationViewModel.UserInfo userModel)
         {
-            userModel.Nickname = User.Identity.Name;
-
             var returnCode = UpdateProfil(userModel);
 
             if (returnCode == "")
@@ -207,15 +204,14 @@ namespace TrouveUnBand.Controllers
         }
 
         [HttpPost]
-        public ActionResult MusicianProfileModification(User user)
+        public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo user2)
         {
             string instrumentList = Request["InstrumentList"];
             string[] instrumentArray = instrumentList.Split(',');
-            bool isUpdated;
 
             if (AllUnique(instrumentArray))
             {
-                user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
+                User user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
                 string skillList = Request["SkillsList"];
                 string[] skillArray = skillList.Split(',');
                 string descriptionMusician = Request["TextArea"];
@@ -236,9 +232,7 @@ namespace TrouveUnBand.Controllers
                     user.Users_Instruments.Add(userInstruments);
                 }
 
-                isUpdated = SaveUpdatedUser();
-
-                if (isUpdated)
+                if (SaveUpdatedUser())
                 {
                     Success(Messages.MUSICIAN_PROFILE_UPDATED, true);
                     return RedirectToAction("Index", "Home");
@@ -339,7 +333,7 @@ namespace TrouveUnBand.Controllers
             db.SaveChanges();
         }
 
-        private void SetUserInfo(User currentUser, User newUser)
+        private void SetUserInfo(User currentUser, ProfileModificationViewModel.UserInfo newUser)
         {
             if ((currentUser.Latitude == 0.0 || currentUser.Longitude == 0.0) || currentUser.Location != newUser.Location)
             {

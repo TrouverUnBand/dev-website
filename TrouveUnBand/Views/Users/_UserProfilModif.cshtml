@@ -1,4 +1,4 @@
-@model TrouveUnBand.Models.User
+@model TrouveUnBand.ViewModels.ProfileModificationViewModel.UserInfo
 <div class="profile-modif-tab-container">
 
     @using (Html.BeginForm("SendImageForCrop", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -52,7 +52,7 @@
     @using (Html.BeginForm("UserProfileModification", "Users", FormMethod.Post, new { @class = "row", @role = "form" }))
     {
         <div class="col-md-7 row">
-            @Html.HiddenFor(model => model.User_ID, new { @class = "form-control", @Value = Model.User_ID })
+            @Html.HiddenFor(model => model.UserId, new { @class = "form-control", @Value = Model.UserId})
             <div class="form-group col-md-6">
                 @Html.Label("Prénom:")
                 @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @Value = Model.FirstName })

@@ -1,94 +1,42 @@
-﻿@model TrouveUnBand.Models.User
+﻿@model TrouveUnBand.ViewModels.ProfileModificationViewModel.MusicianInfo
 
-@using (Html.BeginForm("MusicianProfileModification", "Users", FormMethod.Post, new { @class = "row", @role = "form" }))
-{
-    <div class="profile-modif-tab-container col-md-6 col-md-push-3">
-        <div class="form-group col-md-12">
-            <div class="col-md-12">
-                @Html.Label("Expériences")
-            </div>
-            <div class="col-md-12">
-                @Html.TextArea("TextArea", Model.Description, new { @class = "form-control" })
+<div class="profile-modif-tab-container">
+    @using (Html.BeginForm("MusicianProfileModification", "Users", FormMethod.Post, new { @class = "row", @role = "form" }))
+    {
+        <div class="form-group">
+            <label class="col-md-1 col-md-offset-2 control-label">Description</label>
+            <div class="col-md-8 col-md-offset-2">
+                <textarea class="form-control" placeholder="Écrivez une brève description de vous, vos influences, vos expériences, etc." rows="7"></textarea>
             </div>
         </div>
-        <div class="form-group col-md-12">
-            <div class="col-md-4">
-                @Html.Label("Instruments")
-            </div>
-            <div class="col-md-4">
-                @Html.Label("Niveau")
-                <div id="skillquestion" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" data-original-title="Légendaire = Hendrix"></div>
-            </div>
-            <table id="InstrumentTable" class="form-group col-md-12">
-                @if (Model.Users_Instruments.FirstOrDefault() == null)
-                {
-                    <tr name="1" id="tablerow" class="form-group col-md-12 row">
-                        <td id="tablecell" class="col-md-5">
-                            @Html.DropDownList("InstrumentList", new SelectList(ViewBag.InstrumentListDD, "Instrument_ID", "Name", 0), new { @class = "form-control" })
-                        </td>
-                        <td id="tablecell" class="col-md-5">
-                            @Html.DropDownList("SkillsList", new SelectList(
-                                                                new List<Object>{
-                                                                new { value = "0" , text = "Aucun"  },
-                                                                new { value = "1" , text = "Débutant"  },
-                                                                new { value = "2" , text = "Initié" },
-                                                                new { value = "3" , text = "Intermédiaire"  },
-                                                                new { value = "4" , text = "Avancé" },
-                                                                new { value = "5" , text = "Professionnel"  },
-                                                                },
-                                                                "value", "text", 0),
-                                                                new { @class = "form-control" })
-                        </td>
-                        <td id="tablecellX" class="col-md-4"></td>
-                    </tr>
-                }
-                else
-                {
-                    int i = 0;
-                    foreach (TrouveUnBand.Models.Users_Instruments InstrumentsUser in Model.Users_Instruments)
-                    {
-                        i++;
-                        <tr name="@i" id="tablerow" class="form-group col-md-12 row">
-                            <td id="tablecell" class="col-md-5">
-                                @Html.DropDownList("InstrumentList", new SelectList(ViewBag.InstrumentListDD, "Instrument_ID", "Name",
-                                                                Convert.ToInt32(InstrumentsUser.Instrument_ID)), new { @class = "form-control" })
-                            </td>
-                            <td id="tablecell" class="col-md-5">
-                                @Html.DropDownList("SkillsList", new SelectList(
-                                                                new List<Object>{
-                                                                new { value = "0" , text = "Aucun"  },
-                                                                new { value = "1" , text = "Débutant"  },
-                                                                new { value = "2" , text = "Initié" },
-                                                                new { value = "3" , text = "Intermédiaire"  },
-                                                                new { value = "4" , text = "Avancé" },
-                                                                new { value = "5" , text = "Professionnel"  },
-                                                                },
-                                                                "value", "text", @InstrumentsUser.Skills),
-                                                                new { @class = "form-control" })
 
-                            </td>
-                            <td id="tablecell" class="col-md-4">
-                                @if (i > 1)
-                                {
-                                    <a id="Xfermer" href="#" onclick='DeleteInstrument("@i")'>X</a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-            </table>
-            <div class="form-group col-md-12">
-                <input type="button" onclick="AddInstrument()" class="btn btn-info" value="Ajouter un Instrument" />
+        <div class="form-group">
+            <label class="col-md-1 col-md-offset-2 control-label">Équipements</label>
+            <div class="col-md-8 col-md-offset-2">
+                <textarea class="form-control" placeholder="Écrivez la liste de vos équipements ici..." rows="7"></textarea>
             </div>
+        </div>
 
-            <div class="col-md-11 pull-right">
+        <div class="form-group col-md-8 col-md-offset-2 form-group-multi-dropdown">
+            <label class="col-md-6 row">Instrument(s)</label>
+            <label class="col-md-6">Expérience</label>
+
+            <div class="col-md-6 row input-group-multi-dropdown">
+                @Html.DropDownList("instrument-list",
+                 new SelectList(Model.InstrumentList, "Instrument_ID", "Name"),
+                 new { @class = "form-control selectpicker "})
+                <a class="stars star-rating big-star" data-nb-stars="5" data-placement="right" data-rating="1"></a>
+            </div>
+            
+        </div>
+
+        @*<div class="col-md-11 pull-right">
                 <div class="col-md-7 pull-right">
                     <input type="submit" class="btn btn-primary col-md-12" value="Enregistrer les Modifications" />
                 </div>
                 <div class="col-md-3 pull-right">
                     <input type="button" class="btn btn-default" value="Annuler" onclick="annuler()" />
                 </div>
-            </div>
-        </div>
-    </div>
-}
+            </div>*@
+    }
+</div>

@@ -245,6 +245,7 @@
     <Compile Include="Services\GenreDao.cs" />
     <Compile Include="Services\JsonToModel.cs" />
     <Compile Include="Services\UserDao.cs" />
+    <Compile Include="ViewModels\ProfileModificationViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +256,7 @@
     <Content Include="Content\homepage.css" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\over-bootstrap.css" />
+    <Content Include="Content\profile-modification.css" />
     <Content Include="Content\profile-page.css" />
     <Content Include="Content\alerts.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
