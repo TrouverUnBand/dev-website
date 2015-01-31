@@ -17,17 +17,21 @@
             </div>
         </div>
 
-        <div class="form-group col-md-8 col-md-offset-2 form-group-multi-dropdown">
+        <div class="form-group col-md-8 col-md-offset-2 form-group-instrument-rating">
             <label class="col-md-6 row">Instrument(s)</label>
             <label class="col-md-6">Expérience</label>
 
-            <div class="col-md-6 row input-group-multi-dropdown">
-                @Html.DropDownList("instrument-list",
+            <div class="input-group-instrument-rating">
+                <div class="col-md-5 row">
+                    @Html.DropDownList("instrument-list",
                  new SelectList(Model.InstrumentList, "Instrument_ID", "Name"),
-                 new { @class = "form-control selectpicker "})
-                <a class="stars star-rating big-star" data-nb-stars="5" data-placement="right" data-rating="1"></a>
+                 new { @class = "form-control selectpicker " })
+                </div>
+                <div class="col-md-5 col-md-offset-1 instrument-rating">
+                    <a class="star-rating" data-rating="1" data-nb-star="5" data-access="write"></a>
+                </div>
             </div>
-            
+
         </div>
 
         @*<div class="col-md-11 pull-right">

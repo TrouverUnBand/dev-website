@@ -68,14 +68,28 @@ $(function () {
 });
 
 $(function () {
-    $(".profile-modif-tab-container").on('change', '.input-group-multi-dropdown:last-child select', function() {
+    $(".profile-modif-tab-container").on('change', '.input-group-instrument-rating:last-child select', function () {
         var selectInnerHtml = $("#instrument-list").html();
         var selectClass = $("#instrument-list").attr('class');
-        var selectHtml = '<div class="col-md-6 row input-group-multi-dropdown">' +
-                         '<select class="' + selectClass + '">' + selectInnerHtml + '</select>' +
+
+        var inputGroupHtml = '<div class="input-group-instrument-rating">' +
+                            '<div class="col-md-5 row">'+
+                                '<select class="' + selectClass + '">' + selectInnerHtml + '</select>' +
+                            '</div>' +
+                            '<div class="col-md-5 col-md-offset-1 instrument-rating">' +
+                                '<a class="star-rating" data-rating="1" data-nb-star="5" data-access="write">' +
+                                    '<span class="glyphicon glyphicon-star"></span>' +
+                                    '<span class="glyphicon glyphicon-star-empty"></span>' +
+                                    '<span class="glyphicon glyphicon-star-empty"></span>' +
+                                    '<span class="glyphicon glyphicon-star-empty"></span>' +
+                                    '<span class="glyphicon glyphicon-star-empty"></span>' +
+                                '</a>' +
+                            '</div>' +
                          '</div>';
 
-        $(".form-group-multi-dropdown").append(selectHtml);
+        $(".form-group-instrument-rating").append(inputGroupHtml);
         $('.selectpicker').selectpicker('refresh');
     });
 });
+
+

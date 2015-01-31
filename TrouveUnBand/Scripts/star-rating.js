@@ -1,70 +1,53 @@
-﻿var NbStars = 0;
-var Rating = 0;
-var SkillsList = ["Débutant", "Initié", "Intermédiaire", "Avancé", "Professionnel"];
-var Elements = document.querySelectorAll(".star-rating");
+﻿(function ($) {
+    "use strict";
 
-for (var i = 0; i < Elements.length; i++) {
+    var skillsList = ["Débutant", "Initié", "Intermédiaire", "Avancé", "Professionnel"];
 
-    Elements[i].setAttribute("data-animation", "false");
-    Elements[i].setAttribute("title", SkillsList[1]);
-    Elements[i].setAttribute("data-toggle", "tooltip");
-    NbStars = Elements[i].getAttribute("data-nb-stars");
-    Rating = Elements[i].getAttribute("data-rating");
+    var methods = {
 
-    for (var j = 0; j < NbStars; j++) {
-        if (j < Rating) {
-            Elements[i].innerHTML += '<i class="glyphicon glyphicon-star" data-prev-rating-class="glyphicon glyphicon-star"></i>';
+        showStars: function (element) {
+            var nbOfStars = element.attr("data-nb-star");
+            var baseRating = element.attr("data-rating");
+            var starHtml = "";
+
+            if (element.attr("data-access") === "write") {
+                baseRating = 1;
+            }
+
+            for (var i = 0; i < nbOfStars; i++) {
+                if (baseRating > i) {
+                    starHtml += '<span class="glyphicon glyphicon-star"></span>';
+                } else {
+                    starHtml += '<span class="glyphicon glyphicon-star-empty"></span>';
+                }
+            }
+
+            element.html(starHtml);
         }
-        else {
-            Elements[i].innerHTML += '<i class="glyphicon glyphicon-star-empty" data-prev-rating-class="glyphicon glyphicon-star-empty"></i>';
-        }
-    }
-}
+    };
 
-$('.star-rating i').hover(function () {
-    Rating = 0;
-    $(this).prevAll().removeClass('glyphicon-star-empty').addClass('glyphicon-star');
-    $(this).removeClass('glyphicon-star-empty').addClass('glyphicon-star');
-    $(this).nextAll().addClass('glyphicon-star-empty').removeClass('glyphicon-star');
-
-    $(this).siblings('i').each(function () {
-        if ($(this).hasClass('glyphicon-star')) {
-            Rating = Rating + 1;
-        }
+    $(window).on("load.bs.select.data-api", function () {
+        $(".star-rating").each(function () {
+            methods.showStars($(this));
+        });
     });
-    $(this).parent('.star-rating').attr('data-original-title', SkillsList[Rating]);
 
-    $(this).parent('.star-rating').tooltip('hide');
-    $(this).parent('.star-rating').tooltip('fixTitle');
-    $(this).parent('.star-rating').tooltip('show');
-}, function () {
-        
-});
-
-$('.star-rating').hover(function () {
-        
-}, function () {
-    Rating = 0;
-    $(this).children('i').each(function () {
-        $(this).removeClass('glyphicon-star-empty');
-        $(this).attr('class', $(this).attr('data-prev-rating-class'));
-        if ($(this).hasClass('glyphicon-star')) {
-            Rating = Rating + 1;
-        }
+    $(".form-group-instrument-rating").on("mouseenter", ".star-rating span", function () {
+        $(this).prevAll().switchClass("glyphicon-star-empty", "glyphicon-star");
+        $(this).switchClass("glyphicon-star-empty", "glyphicon-star");
+        $(this).nextAll().switchClass("glyphicon-star", "glyphicon-star-empty");
     });
-    $(this).attr('data-original-title', SkillsList[Rating - 1]);
-});
 
-$('.star-rating').click(function () {
-        
-}, function () {
-    Rating = 0;
-    $(this).children('i').each(function () {
-        $(this).attr('data-prev-rating-class', $(this).attr('class'));
-        if ($(this).hasClass('glyphicon-star')) {
-            Rating = Rating + 1;
-        }
+    $(".form-group-instrument-rating").on("mouseleave", ".star-rating", function () {
+        var rating = $(this).attr("data-rating");
+
+        $(this).children().eq(rating - 1).prevAll().switchClass("glyphicon-star-empty", "glyphicon-star");
+        $(this).children().eq(rating - 1).switchClass("glyphicon-star-empty", "glyphicon-star");
+        $(this).children().eq(rating - 1).nextAll().switchClass("glyphicon-star", "glyphicon-star-empty");
     });
-    $(this).attr('data-rating', Rating);
-});
 
+    $(".form-group-instrument-rating").on("click", ".star-rating span", function () {
+        var newRating = $(this).index() + 1;
+        $(this).parent(".star-rating").attr("data-rating", newRating);
+    });
+}(jQuery));
