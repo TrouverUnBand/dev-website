@@ -9,3 +9,13 @@
 .profile-modif-tab-container textarea {
     margin-bottom: 1.5em;
 }
+
+.instrument-rating-remove {
+    font-size: 1.5em;
+    margin-top: 0.5em;
+    color: #D9534F;
+}
+.instrument-rating-remove span:hover{
+    color: #C9302C;
+    cursor: pointer;
+}
