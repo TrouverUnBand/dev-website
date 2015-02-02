@@ -1,8 +1,11 @@
 ﻿@model TrouveUnBand.ViewModels.ProfileModificationViewModel.MusicianInfo
 
 <div class="profile-modif-tab-container">
-    @using (Html.BeginForm("MusicianProfileModification", "Users", FormMethod.Post, new { @class = "row", @role = "form" }))
+    @using (Html.BeginForm("MusicianProfileModification", "Users", FormMethod.Post, new { @class = "row", @role = "form", @id="musician-profil-modif-form" }))
     {
+        @Html.HiddenFor(model => model.InstrumentsPlayed, new { id = "instruments-played" })
+        @Html.HiddenFor(model => model.InstrumentsPlayedSkills, new { id = "instruments-played-skills" })
+
         <div class="form-group">
             <label class="col-md-1 col-md-offset-2 control-label">Description</label>
             <div class="col-md-8 col-md-offset-2">
@@ -34,13 +37,13 @@
 
         </div>
 
-        @*<div class="col-md-11 pull-right">
-                <div class="col-md-7 pull-right">
-                    <input type="submit" class="btn btn-primary col-md-12" value="Enregistrer les Modifications" />
-                </div>
-                <div class="col-md-3 pull-right">
-                    <input type="button" class="btn btn-default" value="Annuler" onclick="annuler()" />
-                </div>
-            </div>*@
+        <div class="col-md-7 col-md-offset-3">
+            <div class="col-md-5 pull-right">
+                <input id="musician-profile-modif-send" type="button" class="btn btn-primary col-md-12" value="Enregistrer les modifications" />
+            </div>
+            <div class="col-md-2 pull-right">
+                <input type="button" class="btn btn-default" value="Annuler" onclick="annuler()" />
+            </div>
+        </div>
     }
 </div>

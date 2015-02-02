@@ -35,10 +35,7 @@ namespace TrouveUnBand.ViewModels
             public string Photo { get; set; }
             public Photo ProfilePicture { get; set; }
 
-            public UserInfo()
-            {
-                
-            }
+            public UserInfo(){}
 
             public UserInfo(User user)
             {
@@ -56,13 +53,13 @@ namespace TrouveUnBand.ViewModels
         public class MusicianInfo
         {
             public string Description { get; set; }
+            public string EquipementList { get; set; }
+            public string InstrumentsPlayed { get; set; }
+            public string InstrumentsPlayedSkills { get; set; }
             public ICollection<Users_Instruments> UsersInstruments { get; set; }
             public List<Instrument> InstrumentList { get; set; }
 
-            public MusicianInfo()
-            {
-                
-            }
+            public MusicianInfo(){}
                  
             public MusicianInfo(User user)
             {

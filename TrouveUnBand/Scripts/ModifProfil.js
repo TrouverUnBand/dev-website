@@ -58,6 +58,28 @@ $(function () {
     $(".form-group-instrument-rating").on("click", ".instrument-rating-remove", function () {
         $(this).parents(".input-group-instrument-rating").remove();
     });
+
+    $("#musician-profile-modif-send").click(function () {
+        var instrumentsPlayed = "";
+        var instrumentsPlayedSkills = "";
+
+        $(".input-group-instrument-rating").each(function() {
+            var instrument = $(this).find("li.selected").attr("data-original-index");
+            var rating = $(this).find("a.star-rating").attr("data-rating");
+
+            if (instrument !== '0') {
+                instrumentsPlayed += instrument + ',';
+                instrumentsPlayedSkills += rating + ',';
+            }
+        });
+
+        instrumentsPlayed = instrumentsPlayed.slice(0, -1);
+        instrumentsPlayedSkills = instrumentsPlayedSkills.slice(0, -1);
+
+        $("#instruments-played").val(instrumentsPlayed);
+        $("#instruments-played-skills").val(instrumentsPlayedSkills);
+        $("#musician-profil-modif-form").submit();
+    });
 });
 
 

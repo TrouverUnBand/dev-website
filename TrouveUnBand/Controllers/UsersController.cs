@@ -204,29 +204,26 @@ namespace TrouveUnBand.Controllers
         }
 
         [HttpPost]
-        public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo user2)
+        public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo musicianInfo)
         {
-            string instrumentList = Request["InstrumentList"];
-            string[] instrumentArray = instrumentList.Split(',');
+            string[] instrumentsPlayedArray = musicianInfo.InstrumentsPlayed.Split(',');
+            string[] skillsArray = musicianInfo.InstrumentsPlayedSkills.Split(',');
 
-            if (AllUnique(instrumentArray))
+            if (AllUnique(instrumentsPlayedArray))
             {
                 User user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
-                string skillList = Request["SkillsList"];
-                string[] skillArray = skillList.Split(',');
-                string descriptionMusician = Request["TextArea"];
 
-                user.Description = descriptionMusician;
+                user.Description = musicianInfo.Description;
                 user.Users_Instruments.Clear();
 
-                for (int i = 0; i < instrumentArray.Length; i++)
+                for (int i = 0; i < instrumentsPlayedArray.Length; i++)
                 {
                     var userInstruments = new Users_Instruments();
-                    int currentInstrumentId = Convert.ToInt32(instrumentArray[i]);
+                    int currentInstrumentId = Convert.ToInt32(instrumentsPlayedArray[i]);
                     var instrument = db.Instruments.FirstOrDefault(x => x.Instrument_ID == currentInstrumentId);
 
                     userInstruments.Instrument_ID = instrument.Instrument_ID;
-                    userInstruments.Skills = Convert.ToInt32(skillArray[i]);
+                    userInstruments.Skills = Convert.ToInt32(skillsArray[i]);
                     userInstruments.User_ID = user.User_ID;
 
                     user.Users_Instruments.Add(userInstruments);
@@ -248,8 +245,7 @@ namespace TrouveUnBand.Controllers
 
         private bool AllUnique(string[] array)
         {
-            bool allUnique = array.Distinct().Count() == array.Length;
-            return allUnique;
+            return array.Distinct().Count() == array.Length;
         }
 
         private User GetUserInfo(string nickname)
