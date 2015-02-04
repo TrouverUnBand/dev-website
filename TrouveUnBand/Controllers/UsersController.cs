@@ -181,7 +181,7 @@ namespace TrouveUnBand.Controllers
             ProfileModificationViewModel profileModificationView =
                 new ProfileModificationViewModel(loggedOnUser)
                 {
-                    MusicianInfos = {InstrumentList = new List<Instrument>(db.Instruments)}
+                    MusicianInfos = { InstrumentList = new List<Instrument>(db.Instruments) }
                 };
 
 
@@ -206,41 +206,47 @@ namespace TrouveUnBand.Controllers
         [HttpPost]
         public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo musicianInfo)
         {
-            string[] instrumentsPlayedArray = musicianInfo.InstrumentsPlayed.Split(',');
-            string[] skillsArray = musicianInfo.InstrumentsPlayedSkills.Split(',');
+            User user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
 
-            if (AllUnique(instrumentsPlayedArray))
+            user.Description = musicianInfo.Description;
+
+            if (musicianInfo.InstrumentsPlayed != null)
             {
-                User user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
+                string[] instrumentsPlayedArray = musicianInfo.InstrumentsPlayed.Split(',');
+                string[] skillsArray = musicianInfo.InstrumentsPlayedSkills.Split(',');
 
-                user.Description = musicianInfo.Description;
+                if (!AllUnique(instrumentsPlayedArray))
+                {
+                    Warning(Messages.INSTRUMENT_ALREADY_SELECTED, true);
+                    return RedirectToAction("ProfileModification", "Users");
+                }
+
+                var instrumentList = new List<Instrument>(db.Instruments);
+
                 user.Users_Instruments.Clear();
 
                 for (int i = 0; i < instrumentsPlayedArray.Length; i++)
                 {
                     var userInstruments = new Users_Instruments();
-                    int currentInstrumentId = Convert.ToInt32(instrumentsPlayedArray[i]);
-                    var instrument = db.Instruments.FirstOrDefault(x => x.Instrument_ID == currentInstrumentId);
+                    int instrumentIndex = Convert.ToInt32(instrumentsPlayedArray[i]);
+                    int currentInstrumentId = instrumentList[instrumentIndex].Instrument_ID;
 
-                    userInstruments.Instrument_ID = instrument.Instrument_ID;
+                    userInstruments.Instrument_ID = currentInstrumentId;
                     userInstruments.Skills = Convert.ToInt32(skillsArray[i]);
                     userInstruments.User_ID = user.User_ID;
 
                     user.Users_Instruments.Add(userInstruments);
                 }
+            }
 
-                if (SaveUpdatedUser())
-                {
-                    Success(Messages.MUSICIAN_PROFILE_UPDATED, true);
-                    return RedirectToAction("Index", "Home");
-                }
-
+            if (!SaveUpdatedUser())
+            {
                 Danger(Messages.INTERNAL_ERROR);
                 return RedirectToAction("ProfileModification", "Users");
             }
 
-            Warning(Messages.INSTRUMENT_ALREADY_SELECTED, true);
-            return RedirectToAction("ProfileModification", "Users");
+            Success(Messages.MUSICIAN_PROFILE_UPDATED, true);
+            return RedirectToAction("Index", "Home");
         }
 
         private bool AllUnique(string[] array)
@@ -297,7 +303,7 @@ namespace TrouveUnBand.Controllers
                     {
                         Danger(Messages.POSTED_FILES_ERROR, true);
                         return RedirectToAction("ProfileModification");
-                    } 
+                    }
 
                     image = Image.FromStream(postedPhoto.InputStream, true, true);
                 }

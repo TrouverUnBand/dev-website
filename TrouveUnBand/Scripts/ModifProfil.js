@@ -39,7 +39,7 @@ $(function () {
         var inputGroupHtml =
             '<div class="input-group-instrument-rating">' +
                 '<div class="col-md-5 row">'+
-                    '<select class="' + selectClass + '">' + selectInnerHtml + '</select>' +
+                    '<select class="' + selectClass + '"data-live-search="true">' + selectInnerHtml + '</select>' +
                 '</div>' +
                 '<div class="col-md-4 col-md-offset-1 instrument-rating">' +
                     '<a class="star-rating" data-nb-stars="5" data-placement="top" data-rating="1"></a>' +
