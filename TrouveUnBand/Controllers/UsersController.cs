@@ -231,11 +231,14 @@ namespace TrouveUnBand.Controllers
                     int instrumentIndex = Convert.ToInt32(instrumentsPlayedArray[i]);
                     int currentInstrumentId = instrumentList[instrumentIndex].Instrument_ID;
 
-                    userInstruments.Instrument_ID = currentInstrumentId;
-                    userInstruments.Skills = Convert.ToInt32(skillsArray[i]);
-                    userInstruments.User_ID = user.User_ID;
+                    if (instrumentList[instrumentIndex].Name != "Aucun")
+                    {
+                        userInstruments.Instrument_ID = currentInstrumentId;
+                        userInstruments.Skills = Convert.ToInt32(skillsArray[i]);
+                        userInstruments.User_ID = user.User_ID;
 
-                    user.Users_Instruments.Add(userInstruments);
+                        user.Users_Instruments.Add(userInstruments);
+                    }
                 }
             }
 

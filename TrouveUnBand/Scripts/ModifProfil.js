@@ -38,7 +38,7 @@ $(function () {
 
         var inputGroupHtml =
             '<div class="input-group-instrument-rating">' +
-                '<div class="col-md-5 row">'+
+                '<div class="col-md-5 row">' +
                     '<select class="' + selectClass + '"data-live-search="true">' + selectInnerHtml + '</select>' +
                 '</div>' +
                 '<div class="col-md-4 col-md-offset-1 instrument-rating">' +
@@ -63,14 +63,12 @@ $(function () {
         var instrumentsPlayed = "";
         var instrumentsPlayedSkills = "";
 
-        $(".input-group-instrument-rating").each(function() {
+        $(".input-group-instrument-rating").each(function () {
             var instrument = $(this).find("li.selected").attr("data-original-index");
             var rating = $(this).find("a.star-rating").attr("data-rating");
 
-            if (instrument !== '0') {
-                instrumentsPlayed += instrument + ',';
-                instrumentsPlayedSkills += rating + ',';
-            }
+            instrumentsPlayed += instrument + ',';
+            instrumentsPlayedSkills += rating + ',';
         });
 
         instrumentsPlayed = instrumentsPlayed.slice(0, -1);

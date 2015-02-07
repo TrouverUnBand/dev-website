@@ -9,7 +9,9 @@
         <div class="form-group">
             <label class="col-md-1 col-md-offset-2 control-label">Description</label>
             <div class="col-md-8 col-md-offset-2">
-                <textarea class="form-control" placeholder="Écrivez une brève description de vous, vos influences, vos expériences, etc." rows="7"></textarea>
+                @Html.TextAreaFor(model => model.Description, 7, 7,
+                    new { @class = "form-control",
+                          @placeholder="Écrivez une brève description de vous, vos influences, vos expériences, etc."})
             </div>
         </div>
 
