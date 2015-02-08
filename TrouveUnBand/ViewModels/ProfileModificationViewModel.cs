@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TrouveUnBand.Classes;
 using TrouveUnBand.Models;
 
@@ -56,8 +57,10 @@ namespace TrouveUnBand.ViewModels
             public string EquipementList { get; set; }
             public string InstrumentsPlayed { get; set; }
             public string InstrumentsPlayedSkills { get; set; }
+            public List<String> MusicianStyles { get; set; }
             public ICollection<Users_Instruments> UsersInstruments { get; set; }
             public List<Instrument> InstrumentList { get; set; }
+            public List<Genre> GenreList { get; set; }
 
             public MusicianInfo(){}
                  
@@ -65,6 +68,12 @@ namespace TrouveUnBand.ViewModels
             {
                 Description = user.Description;
                 UsersInstruments = user.Users_Instruments;
+                MusicianStyles = new List<string>();
+
+                foreach (var genre in user.Genres)
+                {
+                    MusicianStyles.Add(genre.Name);
+                }
             }
         }
     }

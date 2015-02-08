@@ -181,7 +181,11 @@ namespace TrouveUnBand.Controllers
             ProfileModificationViewModel profileModificationView =
                 new ProfileModificationViewModel(loggedOnUser)
                 {
-                    MusicianInfos = { InstrumentList = new List<Instrument>(db.Instruments) }
+                    MusicianInfos =
+                    {
+                        InstrumentList = new List<Instrument>(db.Instruments),
+                        GenreList = new List<Genre>(db.Genres) 
+                    }
                 };
 
 
@@ -204,11 +208,22 @@ namespace TrouveUnBand.Controllers
         }
 
         [HttpPost]
-        public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo musicianInfo)
+        public ActionResult MusicianProfileModification(ProfileModificationViewModel.MusicianInfo musicianInfo, 
+                                                        string[] profilModifStyleSelect)
         {
             User user = db.Users.FirstOrDefault(x => x.Nickname == User.Identity.Name);
 
             user.Description = musicianInfo.Description;
+
+            if (profilModifStyleSelect != null)
+            {
+                user.Genres.Clear();
+
+                foreach (var genreName in profilModifStyleSelect)
+                {
+                    user.Genres.Add(db.Genres.FirstOrDefault(x => x.Name == genreName));
+                }
+            }
 
             if (musicianInfo.InstrumentsPlayed != null)
             {

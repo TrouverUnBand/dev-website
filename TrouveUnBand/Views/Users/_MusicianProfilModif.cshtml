@@ -6,23 +6,61 @@
         @Html.HiddenFor(model => model.InstrumentsPlayed, new { id = "instruments-played" })
         @Html.HiddenFor(model => model.InstrumentsPlayedSkills, new { id = "instruments-played-skills" })
 
-        <div class="form-group">
-            <label class="col-md-1 col-md-offset-2 control-label">Description</label>
-            <div class="col-md-8 col-md-offset-2">
+        <div class="form-group col-md-8 col-md-offset-2">
+            <h3 class="control-label">
+                Description
+                <small>Écrivez une brève description de vous, vos influences, vos expériences, etc.</small>
+            </h3>
+            <div>
                 @Html.TextAreaFor(model => model.Description, 7, 7,
-                    new { @class = "form-control",
-                          @placeholder="Écrivez une brève description de vous, vos influences, vos expériences, etc."})
+                    new
+                    {
+                        @class = "form-control",
+                        @placeholder = "Écrivez une brève description de vous, vos influences, vos expériences, etc."
+                    })
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-md-1 col-md-offset-2 control-label">Équipements</label>
-            <div class="col-md-8 col-md-offset-2">
+        <div class="form-group col-md-8 col-md-offset-2">
+            <h3 class="control-label profil-modif-section-header-text">
+                Équipements
+                <small>Écrivez la liste de vos équipements ici...</small>
+            </h3>
+            <div>
                 <textarea class="form-control" placeholder="Écrivez la liste de vos équipements ici..." rows="7"></textarea>
             </div>
         </div>
 
+        <div class="form-group col-md-8 col-md-offset-2">
+            <h3 class="control-label profil-modif-section-header-text">
+                Genres musicaux
+                <small>Choisissez les genres musicaux qui vous représentent</small>
+            </h3>
+            <select name="profilModifStyleSelect" class="selectpicker form-control hidden"
+                    title="Choisissez les genres musicaux qui vous représentent"
+                    data-width="100%" data-live-search="true"
+                    data-selected-text-format="count>5" multiple>
+                @foreach (var genre in Model.GenreList)
+                {
+                    if (Model.MusicianStyles.Contains(genre.Name))
+                    {
+                        <option selected>@genre.Name</option>
+                    }
+                    else
+                    {
+                        <option>@genre.Name</option>
+                    }
+                    
+                    //Model.MusicianStyles.Contains(genre) ? <option selected>@genre.Name</option> : <option>@genre.Name</option>
+                }
+            </select>
+        </div>
+
         <div class="form-group col-md-8 col-md-offset-2 form-group-instrument-rating">
+            <h3 class="control-label">
+                Instruments et expériences
+                <small>Vos instruments joués et votre niveau d'expérience</small>
+            </h3>
             <label class="col-md-6 row">Instrument(s)</label>
             <label class="col-md-6">Expérience</label>
 
@@ -35,7 +73,7 @@
                             @Html.DropDownList("played-instrument-" + i.ToString(),
                      new SelectList(Model.InstrumentList, "Instrument_ID", "Name",
                          Convert.ToInt32(InstrumentsUser.Instrument_ID)),
-                     new { @class = "form-control selectpicker", @data_live_search="true" })
+                     new { @class = "form-control selectpicker", @data_live_search = "true" })
                         </div>
                         <div class="col-md-4 col-md-offset-1 instrument-rating">
                             <a class="star-rating" data-nb-stars="5" data-placement="top" data-rating="@InstrumentsUser.Skills"></a>
